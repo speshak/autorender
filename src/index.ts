@@ -364,16 +364,9 @@ async function asyncForEach(array: any, callback: any) {
 async function renderOverlayedPart(inDir: string, outDir: string, file: string) {
     return new Promise((resolve, reject) => {
         // for testing add .addOption('-t 5') which will return a 5s video instead of whole duration
-        const render = ffmpeg(inDir + file)
+        const render = ffmpeg()
             .addInput(outDir + file + '/%04d.png')
             .inputFPS(overlayFPS)
-            .complexFilter([
-                {
-                    filter: 'overlay',
-                    input: '[0:v][1:v]',
-                },
-            ] as any)
-            .addOption('-c:a copy')
             .on('end', resolve)
             .on('error', reject)
             .on('progress', (progress: { timemark: moment.MomentInput; }) => {
@@ -458,12 +451,14 @@ async function load() {
             return x;
         });
 
+        /*
         // render final file by concatinating all rendered parts of track
         if (fileArr.length > 1) {
             await concatVideos(outDir, renderOutDir, fileArr, startDate);
         } else {
             fs.copyFileSync(outDir + fileArr[0], renderOutDir + startDate.format('YYYYMMDD_HHmmss') + '.mp4');
         }
+        */
 
         console.log('END: ' + moment().toISOString());
         const duration = moment.utc(moment().diff(moment(startTime, 'HH:mm:ss'))).format('HH:mm:ss');
