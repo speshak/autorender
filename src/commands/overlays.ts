@@ -16,11 +16,31 @@ export const desc: string = 'Generate overlays for <filename>';
 export const builder: CommandBuilder<Options, Options> = (yargs) =>
   yargs
     .options({
-      images: { type: 'boolean' },
-      video: { type: 'boolean' },
-      in_dir: { type: 'string' },
-      out_dir: { type: 'string' },
-      scratch_dir: { type: 'string' },
+      images: {
+        type: 'boolean',
+        describe: "Generate overlay images",
+        default: true
+      },
+      video: {
+        type: 'boolean',
+        describe: "Generate overlay videos",
+        default: true
+      },
+      in_dir: {
+        type: 'string',
+        demand: true,
+        describe: "Input directory containing raw GoPro video"
+      },
+      out_dir: {
+        type: 'string',
+        demand: true,
+        describe: "Output directory for generated assets"
+      },
+      scratch_dir: {
+        type: 'string',
+        describe: "Directory for temporary files",
+        default: "./scratch"
+      },
     })
     .positional('filename', { type: 'string', demandOption: false });
 
